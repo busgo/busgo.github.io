@@ -1,12 +1,10 @@
-title: Texture Theme
-author: GitHub User
-email: your-email@domain.com
+title: Go兴趣小组
+author: busgo
+email: 466862016@qq.com
 description: > # this means to ignore newlines until "show_exerpts:"
-  Write an awesome description for your new site here. You can edit this
-  line in _config.yml. It will appear in your document head meta (for
-  Google search results) and in your feed.xml site description.
+  Go语言相关技术栈、开源项目以及Go语言相关最新资讯.
 show_excerpts: true # set to true to show excerpts on the homepage
-baseurl: /texture
+baseurl: /busgo.github.com
 
 # Minima date format
 # refer to http://shopify.github.io/liquid/filters/date/ if you want to customize this
@@ -15,8 +13,8 @@ sass:
 
 permalink: /posts/:title/
 texture:
-  title: Adam Denisov
-  tagline: Developer. Designer
+  title: Go兴趣小组
+  tagline: 一群Go语言爱好者聚集地
   date_format: "%b %-d, %Y"
   style: black
   showNav: false
@@ -24,9 +22,9 @@ texture:
 
   # generate social links in footer
   social_links:
-    twitter: thelehhman
-    github:  thelehhman
-    linkedIn: in/thelehhman
+    twitter: busgo
+    github:  busgo
+    linkedIn: in/busgo
     rss: rss
  
 

@@ -4,7 +4,7 @@ email: 466862016@qq.com
 description: > # this means to ignore newlines until "show_exerpts:"
   Go语言相关技术栈、开源项目以及Go语言相关最新资讯.
 show_excerpts: true # set to true to show excerpts on the homepage
-baseurl: /busgo.github.com
+baseurl: /busgo.github.io
 
 # Minima date format
 # refer to http://shopify.github.io/liquid/filters/date/ if you want to customize this

@@ -1,1 +1,191 @@
 > Go Module是Go会在1.12中正式推出的包管理机制。
+
+###	go mod 简介
+
+
+
+Golang 一直存在一个特别烦人的问题就是缺少一个官方的依赖包管理工具。在我开始接触golang的时候基本上所有的项目以及依赖的包都必须放在GOPATH目录下维护起来比较麻烦。在使用的角度上来看存在如下几个问题:
+
+* GOPATH的特性对于多工程的情况下支持不友好。
+* GOPATH无法对依赖的包进行有效的版本管理，没有地方表明对应的工程需要引用的包版本。
+* 每次还有手动执行 go get 下载依赖包
+
+在Go1.11版本官方推出了 go mod 作为官方依赖的包管理工具，但go mod 与以前的vendor 依赖管理不同， go mod 类似 java语言中使用的 maven 本地缓存库的管理方式。不管你有多少个工程只需要对应的工程引用对应的依赖即可。下载的依赖包放在$GOPATH/pkg/mod/cache目录下。
+
+###	go mod 命令使用
+
+  执行 go help mod 会输出mod 相关提示
+
+```shell
+cpe-172-100-10-6:bus apple$ go help mod
+
+go mod download  下载依赖包到本地
+go mod edit 编辑  go.mod文件
+go mod init 项目模块    初始化 go mod 项目
+go mod tidy 根据  go.mod 处理依赖关系
+go mod verified 验证所有依赖模块
+```
+
+
+
+####	初始化go mod项目
+
+```shell
+go mod init github.com/busgo/bus
+```
+
+初始化完成会在项目目录生产 go.mod 和go.sum文件。
+
+* go.mod 类似java语言中的maven的pom.xml文件用于记录相关包依赖。
+* go.sum 用于保存包依赖的校验值。
+
+
+
+####	go.mod文件格式
+
+```go
+
+module github.com/busgo/bus
+
+go 1.12
+
+require github.com/therecipe/qt v0.0.0-20191210183402-3b69292fad6d
+
+replace golang.org/x/crypto => github.com/golang/crypto latest
+
+```
+
+* module  项目模块
+* go  指定 golang 版本
+* require 依赖包(包名+版本 如: github.com/therecipe/qt latest)。
+* replace  用于拉取对应的包替换地址-类似翻墙。
+
+
+
+修改完go.mod 文件执行go mod download  进行下载引入依赖包。
+
+```shell
+go mod download 
+```
+
+
+
+
+
+### 引用依赖
+
+```go
+require github.com/therecipe/qt latest
+```
+
+
+
+####	替换拉取地址
+
+```go 
+replace golang.org/x/crypto => github.com/golang/crypto latest
+```
+
+
+
+
+
+####	go mod 实战
+
+
+
+####	初始化项目
+
+```shell
+go mod init github.com/busgo/bus
+```
+
+初始化完成会在项目目录生成 go.mod和go.sum两个文件
+
+
+
+go.mod
+
+```go
+module github.com/busgo/bus
+go 1.12
+
+```
+
+main.go
+
+```go
+package main
+
+import "github.com/astaxie/beego"
+func main()  {
+
+
+  beego.Run()
+
+}
+
+```
+
+> 执行下载&处理依赖包 go mod tidy 也可以直接修改go mod 文件 添加依赖 执行 go mod download直接下载依赖包。然后引入到工程中。
+
+```she
+cpe-172-100-10-6:bus apple$ go mod download 
+go: finding golang.org/x/net v0.0.0-20181114220301-adae6a3d119a
+go: finding github.com/Knetic/govaluate v3.0.0+incompatible
+go: finding github.com/cloudflare/golz4 v0.0.0-20150217214814-ef862a3cdc58
+go: finding github.com/gomodule/redigo v2.0.0+incompatible
+go: finding github.com/couchbase/go-couchbase v0.0.0-20181122212707-3e9b6e1258bb
+go: finding github.com/couchbase/gomemcached v0.0.0-20181122193126-5125a94a666c
+go: finding github.com/cupcake/rdb v0.0.0-20161107195141-43ba34106c76
+go: finding github.com/siddontang/go v0.0.0-20180604090527-bdc77568d726
+go: finding github.com/elazarl/go-bindata-assetfs v1.0.0
+go: finding github.com/wendal/errors v0.0.0-20130201093226-f66c77a7882b
+go: finding github.com/beego/goyaml2 v0.0.0-20130207012346-5545475820dd
+go: finding github.com/couchbase/goutils v0.0.0-20180530154633-e865a1461c8a
+go: finding github.com/pelletier/go-toml v1.2.0
+go: finding github.com/casbin/casbin v1.7.0
+go: finding github.com/beego/x2j v0.0.0-20131220205130-a0352aadc542
+go: finding github.com/golang/snappy v0.0.0-20180518054509-2e65f85255db
+go: finding golang.org/x/crypto v0.0.0-20181127143415-eb0de9b17e85
+go: finding github.com/syndtr/goleveldb v0.0.0-20181127023241-353a9fca669c
+go: finding github.com/siddontang/rdb v0.0.0-20150307021120-fc89ed2e418d
+go: finding github.com/ssdb/gossdb v0.0.0-20180723034631-88f6b59b84ec
+go: finding github.com/OwnLocal/goes v1.0.0
+go: finding github.com/bradfitz/gomemcache v0.0.0-20180710155616-bc664df96737
+go: finding github.com/go-redis/redis v6.14.2+incompatible
+go: finding github.com/siddontang/ledisdb v0.0.0-20181029004158-becf5f38d373
+cpe-172-100-10-6:bus apple$ go mod download
+cpe-172-100-10-6:bus apple$ go mod tidy
+go: finding github.com/shiena/ansicolor latest
+go: downloading github.com/shiena/ansicolor v0.0.0-20151119151921-a422bbe96644
+go: extracting github.com/shiena/ansicolor v0.0.0-20151119151921-a422bbe96644
+```
+
+> 没有出错说明成功下载
+
+
+
+###	goproxy
+
+关于goproxy 简单的来说它就是一个代理，是让我们更方便的去下载那些被墙了的原因无法直接下载的依赖包。比如 golang.org/x下的依赖包，goproxy使用非常简单，只需要配置GOPROXY环境变量即可 以下是两个可用的全球代理
+
+```shell
+## goproxy.io
+export GOPROXY=https://goproxy.io
+## 阿里云
+export GOPROXY=https://mirrors.aliyun.com/goproxy/
+```
+
+
+
+###	结束语
+
+go mod 是目前官方推出的非常帮的依赖包管理工具，让开发者不需要再关系 $GOPATH目录下的内容，只需要关系当前工程的依赖即可。如果下载依赖包无法下载请配置GOPROXY即可飞速下载。
+
+> ​	文章有些不足之处欢迎指导批评
+
+
+
+> ​	欢迎关注我的 [github](https://github.com/busgo) 
+
